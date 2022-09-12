@@ -87,7 +87,7 @@ class Project:  # pylint: disable=too-many-instance-attributes
             self.project_dir /= self.project_name
 
         self.package_name: str = config.package_name_override or self.project_name.replace("-", "_")
-        self.package_dir: Path = self.project_dir / self.package_name
+        self.package_dir: Path = self.project_dir / self.package_name.replace(".", "/")
         self.package_description: str = utils.remove_string_escapes(
             f"A client library for accessing {self.openapi.title}"
         )
@@ -174,7 +174,7 @@ class Project:  # pylint: disable=too-many-instance-attributes
         return errors
 
     def _create_package(self) -> None:
-        self.package_dir.mkdir()
+        self.package_dir.mkdir(parents=True)
         # Package __init__.py
         package_init = self.package_dir / "__init__.py"
 
